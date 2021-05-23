@@ -892,6 +892,7 @@ void ssl_server_init (char *server)
     char *dhparams = NIL;
 
     SSL_CTX_set_options (stream->context,SSL_OP_ALL);
+    SSL_CTX_set_options (stream->context,SSL_OP_CIPHER_SERVER_PREFERENCE);	  
 				/* set protocols */
     if ((s = (char *) mail_parameters (NIL,GET_SSLPROTOCOLS,NIL)) != NULL) {
       errstr = ssl_cmd_protocol_parse(s, &protocol);
@@ -982,6 +983,11 @@ void ssl_server_init (char *server)
 		  DH_free(dh);
 		}
 	}
+
+#if OPENSSL_VERSION_NUMBER >= 0x10002000
+                                /* Enable support for ECDHE ciphers */
+      SSL_CTX_set_ecdh_auto(stream->context, 1);
+#endif
 
 				/* create new SSL connection */
       if (!(stream->con = SSL_new (stream->context)))
