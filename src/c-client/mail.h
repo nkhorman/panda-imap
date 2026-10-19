@@ -25,7 +25,7 @@
 
 /* The Version */
 
-#define CCLIENTVERSION "2010"
+#define CCLIENTVERSION "2025"
 
 /* Build parameters */
 
